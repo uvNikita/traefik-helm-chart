@@ -127,10 +127,6 @@
          {{- end }}
         {{- end }}
         {{- if .Values.hub.token }}
-          {{- $listenAddr := default ":9943" .Values.hub.apimanagement.admission.listenAddr }}
-        - name: admission
-          containerPort: {{ last (mustRegexSplit ":" $listenAddr 2) }}
-          protocol: TCP
           {{- if .Values.hub.apimanagement.enabled }}
         - name: apiportal
           containerPort: 9903
@@ -662,17 +658,9 @@
           {{- with .Values.hub }}
            {{- if .token }}
           - "--hub.token=$(HUB_TOKEN)"
-            {{- if and (not .apimanagement.enabled) ($.Values.hub.apimanagement.admission.listenAddr) }}
-               {{- fail "ERROR: Cannot configure admission without enabling hub.apimanagement" }}
-            {{- end }}
             {{- with .apimanagement }}
              {{- if .enabled }}
-              {{- $listenAddr := default ":9943" .admission.listenAddr }}
           - "--hub.apimanagement"
-          - "--hub.apimanagement.admission.listenAddr={{ $listenAddr }}"
-              {{- with .admission.secretName }}
-          - "--hub.apimanagement.admission.secretName={{ . }}"
-              {{- end }}
              {{- end }}
             {{- end }}
             {{- with .platformUrl }}
@@ -746,7 +734,6 @@
           {{- end }}
         - name: tmp
           emptyDir: {}
-        {{- $root := . }}
         {{- range .Values.volumes }}
         - name: {{ tpl (.name) $root | replace "." "-" }}
           {{- if eq .type "secret" }}

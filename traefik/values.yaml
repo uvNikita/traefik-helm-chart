@@ -893,11 +893,6 @@ hub:
   apimanagement:
     # -- Set to true in order to enable API Management. Requires a valid license token.
     enabled:
-    admission:
-      # -- WebHook admission server listen address. Default: "0.0.0.0:9943".
-      listenAddr:
-      # -- Certificate of the WebHook admission server. Default: "hub-agent-cert".
-      secretName:
 
   ratelimit:
     redis:

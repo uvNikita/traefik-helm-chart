@@ -24,22 +24,12 @@ rules:
       - list
       - watch
 {{- if not .Values.rbac.namespaced }}
-  {{- if (semverCompare "<v3.1.0" (.Values.image.tag | default .Chart.AppVersion)) }}
-  - apiGroups:
-      - ""
-    resources:
-      - endpoints
-      - services
-    verbs:
-      - get
-      - list
-      - watch
-  {{- else }}
   - apiGroups:
       - ""
     resources:
       - nodes
       - services
+      - endpoints
     verbs:
       - get
       - list
@@ -54,7 +44,6 @@ rules:
     {{- end }}
       - list
       - watch
-  {{- end }}
   - apiGroups:
       - ""
     resources:
